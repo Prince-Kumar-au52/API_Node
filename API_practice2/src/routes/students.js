@@ -1,18 +1,29 @@
 const express = require("express");
 const router = express.Router();
-// const Student = require("../modles/students");
-// const mongoose = require("mongoose");
 const studentCtrl = require("../controllers/studentCtrl");
+const jwtauth = require("../middleware/jwt_auth");
+const multer = require("multer");
+const multer_file = require("../middleware/multer_fileupload");
+const fileFilter = require("../middleware/multerFilter_fileupload");
 
-// router.get("/", (req, res, next) => {
-//   res.status(200).json({
-//     msg: "this is student get request",
-//   });
-// });
+const upload = multer({
+  storage: multer_file.storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5, //5mb
+  },
+  fileFilter: fileFilter.filter,
+});
 
+// Public route to create a new student (no authentication required)
+router.post("/post", upload.single("studentImage"), studentCtrl.PostStudent);
+
+// Protected route - Authentication required to get student data
 router.get("/get", studentCtrl.GetStudent);
-router.post("/post", studentCtrl.PostStudent);
-router.put("/update/:id", studentCtrl.UpdateStudent);
-router.delete("/delete/:id", studentCtrl.DeleteStudent);
+
+router.put("/put/:id", studentCtrl.UpdateStudentPut);
+
+router.patch("/patch/:id", studentCtrl.UpdateStudentPatch);
+
+router.delete("/delete/:id", jwtauth, studentCtrl.DeleteStudent);
 
 module.exports = router;

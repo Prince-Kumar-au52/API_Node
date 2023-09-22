@@ -6,6 +6,9 @@ const studentScema = new mongoose.Schema({
   email: String,
   phone: Number,
   password: String,
+  image:String,
+  marks:Number
+  
 });
 
 module.exports = mongoose.model("Student", studentScema);
