@@ -14,16 +14,12 @@ const upload = multer({
   fileFilter: fileFilter.filter,
 });
 
-// Public route to create a new student (no authentication required)
 router.post("/post", upload.single("studentImage"), studentCtrl.PostStudent);
-
-// Protected route - Authentication required to get student data
 router.get("/get", studentCtrl.GetStudent);
-
 router.put("/put/:id", studentCtrl.UpdateStudentPut);
-
-router.patch("/patch/:id", studentCtrl.UpdateStudentPatch);
-
-router.delete("/delete/:id", jwtauth, studentCtrl.DeleteStudent);
+// router.patch("/patch/:id", studentCtrl.UpdateStudentPatch);
+router.get("/get/:id", studentCtrl.GetByIdStudent);
+router.delete("/delete/:id", studentCtrl.DeleteStudent);
+router.get("/getName", studentCtrl.GetStudentName);
 
 module.exports = router;
